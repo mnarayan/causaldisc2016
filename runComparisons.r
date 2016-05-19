@@ -1,10 +1,74 @@
-library(R.Matlab)
-aMFG <- readMat('pcnets/SP_aMFG_4.1.mat)
-pMFG <- readMat('pcnets/SP_pMFG_4.2.mat)
 
-X_aMFG <- aMFG$Data
-X_pMFG <- pMFG$Data
+# Test function for GIES ------------------------------
+require(R.matlab)
+Alldata <- readMat('~/datasets/RestingAndStimData_5.16.mat')
 
+xdim1 <- dim(Alldata$Data.0)
+xdim2 <- dim(Alldata$Data.1)
+xdim3 <- dim(Alldata$Data.2)
+xdim3 <- dim(Alldata$Data.3)
+xdim4 <- dim(Alldata$Data.4)
+
+
+summary(target.index)
+print(target.index[0])
+print(target.index[xdim1[1]+5])
+print(target.index[xdim1[1]+xdim2[1]+5])
+
+stabMatright <- matrix(0,0,xdim1[2])
+for(subjno in 1:xdim1[3]){
+    print(subjno)
+   # t.start <- proc.time()                         # start timer
+   # t.date <- format(Sys.time(), "%Y_%m_%d_%H.%M") # time stamp for file saving
+    nresamples <-50
+    X <- rbind(Alldata$Data.0[,,subjno],Alldata$Data.1[,,subjno],Alldata$Data.2[,,subjno])
+    print(dim(X))
+    targetNodes <- list(0,27,28)
+    print(targetNodes)
+    targetInt <- c(rep(1,xdim1[1]),rep(2,xdim2[1]),rep(3,xdim3[1]))
+    summary(targetInt)
+    outputFile <- paste('~/causaldisc2016/RestingRightStim_',subjno,format(Sys.time(),'_Stability_GIES_%Y_%m_%d_%H%M'))
+
+    stabMat<- SubjStabilityGIES(X, nresamples=nresamples,targets=targetNodes, target.index=targetInt, filename=outputFile)
+    stabMatright<- rbind(stabMatright,stabMat)
+}
+writeMat('~/causaldisc2016/RightStim_GIES.mat',stabMat=stabMatright)
+
+stabMatleft <- matrix(0,0,xdim1[2])
+for(subjno in 1:xdim1[3]){
+    print(subjno)
+   # t.start <- proc.time()                         # start timer
+   # t.date <- format(Sys.time(), "%Y_%m_%d_%H.%M") # time stamp for file saving
+    nresamples <-50
+    X <- rbind(Alldata$Data.0[,,subjno],Alldata$Data.3[,,subjno],Alldata$Data.4[,,subjno])
+    targetNodes <- list(0,9,10)
+    print(targetNodes)
+    targetInt <- c(rep(1,xdim1[1]),rep(2,xdim2[1]),rep(3,xdim3[1]))
+    summary(targetInt)
+    outputFile <- paste('~/causaldisc2016/RestingLeftStim_',subjno,format(Sys.time(),'_Stability_GIES_%Y_%m_%d_%H%M'))
+    
+    stabMat<- SubjStabilityGIES(X, nresamples=nresamples,targets=targetNodes, target.index=targetInt, filename=outputFile)
+    stabMatleft<- rbind(stabMatleft,stabMat)
+}    
+writeMat('~/causaldisc2016/LeftStim_GIES.mat',stabMat=stabMatleft)
+
+
+
+stabMatRest <- matrix(0,0,xdim1[2])
+for(subjno in 1:xdim1[3]){
+    print(subjno)
+   # t.start <- proc.time()                         # start timer
+   # t.date <- format(Sys.time(), "%Y_%m_%d_%H.%M") # time stamp for file saving
+    nresamples <-50
+    X <- Alldata$Data.0[,,subjno]
+    outputFile <- paste('~/causaldisc2016/Resting_',subjno,format(Sys.time(),'_Stability_GES_%Y_%m_%d_%H%M'))    
+    stabMat<- SubjStabilityGES(X, nresamples=nresamples, filename=outputFile)
+    stabMatRest<- rbind(stabMatleft,stabMat)
+}    
+writeMat('~/causaldisc2016/Resting_Stability_GES.mat',stabMat=stabMatRest)
+
+
+###################### OLDER CODE, Try BackShift Later ##################
 X <- X_pMFG[,,2]
 library(CompareCausalNetworks)
 
