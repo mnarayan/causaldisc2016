@@ -9,3 +9,6 @@ Data/figures/GIES/Digraph_RPMFG_RestingRight_Stability_GIES.tikz filter=lfs diff
 Data/GIES/LeftStim_Stability_GIES.mat filter=lfs diff=lfs merge=lfs -text
 Data/GIES/RightStim_Stability_GIES.mat filter=lfs diff=lfs merge=lfs -text
 Data/GES/Resting_Stability_GES.mat filter=lfs diff=lfs merge=lfs -text
+*.tikz filter=lfs diff=lfs merge=lfs -text
+Data/GIES/*.mat filter=lfs diff=lfs merge=lfs -text
+Data/GES/*.mat filter=lfs diff=lfs merge=lfs -text
