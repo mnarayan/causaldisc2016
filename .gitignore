@@ -1,0 +1,10 @@
+*.png
+*.fig
+*.mat
+*.tikz
+*.tsv
+Data/GIES
+Data/GES/
+Data/*PC*
+
+
